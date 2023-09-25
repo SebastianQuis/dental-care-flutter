@@ -1,8 +1,10 @@
+
 import 'package:flutter/material.dart';
 
-import 'package:dental_care_app/presentation/widgets/button_blue.dart';
-import 'package:dental_care_app/presentation/widgets/input_form.dart';
-import 'package:dental_care_app/presentation/widgets/title_subtitle.dart';
+import 'package:provider/provider.dart';
+
+import 'package:dental_care_app/config/services/services.dart';
+import 'package:dental_care_app/presentation/widgets/widgets.dart';
  
 class RecuperaClaveScreen extends StatelessWidget {
    static String nombre = 'recuperaClave';  
@@ -14,6 +16,7 @@ class RecuperaClaveScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
+
 
               Container(
                 alignment: Alignment.centerLeft,
@@ -28,12 +31,16 @@ class RecuperaClaveScreen extends StatelessWidget {
                 ),
               ),
 
+              LogoImage(
+                height: 220,
+              ),
+
               Padding(
-                padding: EdgeInsets.only( top: 10, bottom: 40),
+                padding: EdgeInsets.only( top: 20, bottom: 40),
                 child: TitleSubTitle(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   title: '¿Olvidaste tu contraseña?', 
-                  subTitle: 'Ingresa tu correo electrónico y envía el código de verificación'
+                  subTitle: 'Ingresa tu correo electrónico y revisa tu correo para restablecer tu contraseña'
                 ),
               ),
 
@@ -54,6 +61,9 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final authService = Provider.of<AuthService>(context);
+
+    String? _email;
 
     return Container(
       width: double.infinity,
@@ -64,40 +74,54 @@ class _Body extends StatelessWidget {
         // mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           InputForm(
-            hintText: 'Correo electrónico'
+            textInputType: TextInputType.emailAddress,
+            hintText: 'Correo electrónico',
+            onChanged: (value) => _email = value,
+            // validator: (value) {
+              
+            // },
           ),
 
           ButtonBlue(
-            onPressed: () {
-              
+            onPressed: () async {
+              String pattern =
+                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+              RegExp regExp = RegExp(pattern);
+
+              if (regExp.hasMatch(_email ?? '')) {
+                await authService.recuperarClave(_email!);
+                NotificacionService.showSnackBar('Correo enviado', Colors.black45);
+              } else {
+                NotificacionService.showSnackBar('Correo incorrecto', Colors.red);
+              }
             }, 
             nombre: 'Verificar'
           ),
 
           SizedBox(height: 40,),
 
-          InputForm(
-            hintText: '****',
-            labelText: 'Ingresa el código de verificación'
-          ),
+          // InputForm(
+          //   hintText: '****',
+          //   labelText: 'Ingresa el código de verificación'
+          // ),
 
-          Row(
-            children: [
-              Text('¿No recibiste el código?   '),
-              // SizedBox(width: 10,),
-              GestureDetector(
-                child: Text('Reenviar el código', style: TextStyle(fontWeight: FontWeight.w600),)),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     Text('¿No recibiste el código?   '),
+          //     // SizedBox(width: 10,),
+          //     GestureDetector(
+          //       child: Text('Reenviar el código', style: TextStyle(fontWeight: FontWeight.w600),)),
+          //   ],
+          // ),
 
           SizedBox(height: 40,),
 
-          ButtonBlue(
-            onPressed: () {
+          // ButtonBlue(
+          //   onPressed: () {
               
-            }, 
-            nombre: 'Confirmar'
-          )
+          //   }, 
+          //   nombre: 'Confirmar'
+          // )
         ],
       ),
     );

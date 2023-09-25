@@ -1,4 +1,5 @@
 
+import 'package:dental_care_app/presentation/screens/carga_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dental_care_app/presentation/screens/citas_programadas_doc_screen.dart';
@@ -16,7 +17,7 @@ import 'package:dental_care_app/presentation/screens/login_screen.dart';
 
 class AppRoutes {
 
-  static String initialRoute = CitasProgramadasDocScreen.nombre;
+  static String initialRoute = LoginScreen.nombre;
 
   
   static Map<String, Widget Function(BuildContext)> getAppRoutes() {
@@ -34,6 +35,7 @@ class AppRoutes {
     appRoutes.addAll( { NotificacionScreenScreen.nombre    : ( _ ) => NotificacionScreenScreen()});
     appRoutes.addAll( { CitasProgramadasDocScreen.nombre   : ( _ ) => CitasProgramadasDocScreen()});
     appRoutes.addAll( { HistorialDocScreen.nombre          : ( _ ) => HistorialDocScreen()});
+    appRoutes.addAll( { CargaScreen.nombre                 : ( _ ) => CargaScreen()});
 
     return appRoutes;
   }

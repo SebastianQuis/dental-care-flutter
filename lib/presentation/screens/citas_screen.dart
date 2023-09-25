@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
-import 'package:dental_care_app/presentation/drawer/drawer_menu.dart';
-import 'package:dental_care_app/presentation/screens/new_cita_screen.dart';
-import 'package:dental_care_app/presentation/widgets/logo_image.dart';
-import 'package:dental_care_app/presentation/widgets/title_subtitle.dart';
+import 'package:provider/provider.dart';
  
+import 'package:dental_care_app/config/services/services.dart';
+import 'package:dental_care_app/presentation/drawer/drawer_menu.dart';
+import 'package:dental_care_app/presentation/screens/screens.dart';
+import 'package:dental_care_app/presentation/widgets/widgets.dart';
+
 class CitasScreen extends StatelessWidget {
   static const nombre = 'citasScreen';
 
   @override
   Widget build(BuildContext context) {
+    final usuarioService = Provider.of<UsuarioService>(context);
+    
     return Scaffold(
 
       appBar: AppBar(),
@@ -29,7 +33,7 @@ class CitasScreen extends StatelessWidget {
               TitleSubTitle(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 title: 'Bienvenido', 
-                subTitle: 'Ruth R'
+                subTitle: '${usuarioService.usuarioSeleccionado!.nombre} ${usuarioService.usuarioSeleccionado!.apellidos}'
               ),
 
               SizedBox(height: 40,),

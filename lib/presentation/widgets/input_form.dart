@@ -33,6 +33,7 @@ class InputForm extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),
       child: TextFormField(
+        autocorrect: false,
         enabled: enabled,
         // focusNode: focusNode,
         // autofocus: true,

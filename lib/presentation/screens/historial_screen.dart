@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:dental_care_app/presentation/drawer/drawer_menu.dart';
-import 'package:dental_care_app/presentation/widgets/logo_image.dart';
-import 'package:dental_care_app/presentation/widgets/title_subtitle.dart';
+import 'package:dental_care_app/presentation/widgets/widgets.dart';
  
 class HistorialScreen extends StatelessWidget {
   static const nombre = 'historialScreen';

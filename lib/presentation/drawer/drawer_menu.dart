@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 
+import 'package:dental_care_app/config/services/auth_service.dart';
+import 'package:dental_care_app/config/services/usuario_service.dart';
 import 'package:dental_care_app/presentation/screens/citas_programadas_doc_screen.dart';
 import 'package:dental_care_app/presentation/screens/citas_screen.dart';
 import 'package:dental_care_app/presentation/screens/historial_doc_screen.dart';
 import 'package:dental_care_app/presentation/screens/historial_screen.dart';
 import 'package:dental_care_app/presentation/screens/login_screen.dart';
 import 'package:dental_care_app/presentation/screens/perfil_screen.dart';
+import 'package:provider/provider.dart';
 
 class DrawerMenu extends StatelessWidget {
   const DrawerMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // final authService = Provider.of<AuthService>(context);
+    final usuarioService = Provider.of<UsuarioService>(context);
+
     return Drawer(
       child: SafeArea(
         child: Column(
@@ -29,14 +35,14 @@ class DrawerMenu extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
       
             ListTile(
-              title: Text('Ruth R.', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),),
-              subtitle: Text('ruth_r@gmail.com', style: TextStyle(fontSize: 16, color: Colors.grey)),              
+              title: Text('${usuarioService.usuarioSeleccionado?.nombre ?? ''} ${usuarioService.usuarioSeleccionado?.apellidos ?? ''}' , style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),),
+              subtitle: Text(usuarioService.usuarioSeleccionado?.email ?? '', style: const TextStyle(fontSize: 16, color: Colors.grey)),              
             ),
 
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             
 
             ListTile(
@@ -45,52 +51,55 @@ class DrawerMenu extends StatelessWidget {
               onTap: () {
                 Navigator.pushNamed(context, CitasScreen.nombre);
               },
-              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
+              trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
             ),
-            Divider(),
+            const Divider(),
             ListTile(
               leading: const Icon(Icons.person_outline,),
               title: const Text('Mis perfil'),
               onTap: () {
                 Navigator.pushNamed(context, PerfilScreen.nombre);
               },
-              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
+              trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
             ),
-            Divider(),
+            const Divider(),
             ListTile(
               leading: const Icon(Icons.note_add_outlined, ),
               title: const Text('Historial dental'),
               onTap: () {
                 Navigator.pushNamed(context, HistorialScreen.nombre);
               },
-              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
+              trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
             ),
-            Divider(),
+            const Divider(),
             ListTile(
               leading: const Icon(Icons.calendar_today_outlined),
               title: const Text('Citas programadas'),
               onTap: () {
                 Navigator.pushNamed(context, CitasProgramadasDocScreen.nombre);
               },
-              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
+              trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
             ),
-            Divider(),
+            const Divider(),
             ListTile(
               leading: const Icon(Icons.note_add_outlined, ),
               title: const Text('Historial dental'),
               onTap: () {
                 Navigator.pushNamed(context, HistorialDocScreen.nombre);
               },
-              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
+              trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
             ),
-            Divider(),
+            const Divider(),
 
-            Spacer(),
+            const Spacer(),
 
             ListTile(
               leading: const Icon(Icons.logout_outlined, ),
               title: const Text('Cerrar sesión'),
               onTap: () {
+                final authService = Provider.of<AuthService>(context, listen: false);
+                authService.logOut();
+
                 Navigator.pushReplacementNamed(context, LoginScreen.nombre);
               },
             ),

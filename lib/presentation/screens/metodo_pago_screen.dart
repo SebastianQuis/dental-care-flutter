@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:dental_care_app/presentation/screens/notificacion_cita_screen.dart';
-import 'package:dental_care_app/presentation/widgets/button_blue.dart';
-import 'package:dental_care_app/presentation/widgets/logo_image.dart';
-import 'package:dental_care_app/presentation/widgets/mostrar_alerta.dart';
-import 'package:dental_care_app/presentation/widgets/title_subtitle.dart';
+import 'package:dental_care_app/presentation/screens/screens.dart';
+import 'package:dental_care_app/presentation/widgets/widgets.dart';
  
 class MetodoPagoScreen extends StatelessWidget {
   static const nombre = 'metodoPagoScreen';

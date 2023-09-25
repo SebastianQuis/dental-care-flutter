@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:dental_care_app/presentation/screens/citas_screen.dart';
-import 'package:dental_care_app/presentation/widgets/button_blue.dart';
-import 'package:dental_care_app/presentation/widgets/logo_image.dart';
-import 'package:dental_care_app/presentation/widgets/title_subtitle.dart';
+import 'package:dental_care_app/presentation/widgets/widgets.dart';
  
 class NotificacionScreenScreen extends StatelessWidget {
   static const nombre = 'notificacionScreen';
