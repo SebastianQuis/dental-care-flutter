@@ -17,7 +17,7 @@ import 'package:dental_care_app/presentation/screens/login_screen.dart';
 
 class AppRoutes {
 
-  static String initialRoute = LoginScreen.nombre;
+  static String initialRoute = CargaScreen.nombre;
 
   
   static Map<String, Widget Function(BuildContext)> getAppRoutes() {

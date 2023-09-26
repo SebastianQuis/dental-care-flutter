@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 
-import 'package:dental_care_app/config/services/auth_service.dart';
-import 'package:dental_care_app/config/services/usuario_service.dart';
-import 'package:dental_care_app/presentation/screens/citas_programadas_doc_screen.dart';
-import 'package:dental_care_app/presentation/screens/citas_screen.dart';
-import 'package:dental_care_app/presentation/screens/historial_doc_screen.dart';
-import 'package:dental_care_app/presentation/screens/historial_screen.dart';
-import 'package:dental_care_app/presentation/screens/login_screen.dart';
-import 'package:dental_care_app/presentation/screens/perfil_screen.dart';
 import 'package:provider/provider.dart';
+
+import 'package:dental_care_app/presentation/helpers/preferences.dart';
+import 'package:dental_care_app/config/services/services.dart';
+import 'package:dental_care_app/presentation/screens/screens.dart';
 
 class DrawerMenu extends StatelessWidget {
   const DrawerMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // final authService = Provider.of<AuthService>(context);
     final usuarioService = Provider.of<UsuarioService>(context);
+    final usuarioLogeado = usuarioService.usuarioLogeado;
+    
+    final authService = Provider.of<AuthService>(context);
+    final usuario = authService.usuario;
 
     return Drawer(
       child: SafeArea(
         child: Column(
           children: [
-      
+            
             Container(
               width: 100,
               height: 100,
@@ -34,17 +33,17 @@ class DrawerMenu extends StatelessWidget {
                 ),
               ),
             ),
-
-            const SizedBox(height: 20,),
-      
-            ListTile(
-              title: Text('${usuarioService.usuarioSeleccionado?.nombre ?? ''} ${usuarioService.usuarioSeleccionado?.apellidos ?? ''}' , style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),),
-              subtitle: Text(usuarioService.usuarioSeleccionado?.email ?? '', style: const TextStyle(fontSize: 16, color: Colors.grey)),              
-            ),
-
+        
             const SizedBox(height: 20,),
             
-
+            ListTile(
+              title: Text('${usuarioLogeado!.nombre} ${usuarioLogeado.apellidos.split(' ')[0]}' , style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),),
+              subtitle: Text(usuario?.email ?? Preferences.correo, style: const TextStyle(fontSize: 16, color: Colors.grey)),              
+            ),
+        
+            const SizedBox(height: 10,),
+            
+        
             ListTile(
               leading: const Icon(Icons.calendar_today_outlined, ),
               title: const Text('Mis citas'),
@@ -90,20 +89,20 @@ class DrawerMenu extends StatelessWidget {
               trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
             ),
             const Divider(),
-
+        
             const Spacer(),
-
+        
             ListTile(
               leading: const Icon(Icons.logout_outlined, ),
               title: const Text('Cerrar sesión'),
               onTap: () {
                 final authService = Provider.of<AuthService>(context, listen: false);
                 authService.logOut();
-
+        
                 Navigator.pushReplacementNamed(context, LoginScreen.nombre);
               },
             ),
-      
+            
           ],
         ),
       ),

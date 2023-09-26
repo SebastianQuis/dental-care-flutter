@@ -22,7 +22,7 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
         
@@ -35,11 +35,11 @@ class LoginScreen extends StatelessWidget {
                 title: 'Iniciar sesión',
               ),
     
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
         
               ChangeNotifierProvider(
                 create: (context) => LoginFormProvider(),
-                child: BodyLogin()
+                child: const BodyLogin()
               ),
         
             ],
@@ -175,7 +175,7 @@ class _BodyLoginState extends State<BodyLogin> {
       
             TextButton(
               onPressed: () {
-                usuarioService.usuarioSeleccionado = Usuario(
+                usuarioService.usuarioLogeado = Usuario(
                   apellidos: '', 
                   celular: '', 
                   email: '', 

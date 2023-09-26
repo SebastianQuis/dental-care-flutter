@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-
-import 'package:dental_care_app/config/services/notificacion_service.dart';
-import 'package:dental_care_app/config/services/usuario_service.dart';
-import 'package:dental_care_app/config/services/auth_service.dart';
+import 'package:dental_care_app/presentation/helpers/preferences.dart';
+import 'package:dental_care_app/config/services/services.dart';
 import 'package:dental_care_app/config/routes/app_routes.dart';
 import 'package:dental_care_app/presentation/screens/screens.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Preferences.init();
   runApp(const AppState());
 }
 

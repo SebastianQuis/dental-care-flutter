@@ -1,9 +1,12 @@
 
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
+import 'package:http/http.dart' as http;
+
+import 'package:dental_care_app/domain/entities/entities.dart';
+import 'package:dental_care_app/presentation/helpers/preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
@@ -13,6 +16,8 @@ class AuthService extends ChangeNotifier{
   final String _baseURL = 'identitytoolkit.googleapis.com';
   final String _fireBaseToken = 'AIzaSyBFntsdZ_XENC8a4jANcgkjtfWc_yeFcGs';
   final storage = FlutterSecureStorage();
+  
+  UsuarioResponse? usuario;
   
   bool isLoading = true;
 
@@ -59,8 +64,9 @@ class AuthService extends ChangeNotifier{
     if (respuestaDecodificada.containsKey('idToken')) {
       if (savePassword == true) {
         await storage.write(key: 'idToken', value: respuestaDecodificada['idToken']);
+        Preferences.correo = respuestaDecodificada['email'];
       }
-      // usuario = UsuarioResponse.fromJson(respuestaDecodificada); //T
+      usuario = UsuarioResponse.fromJson(respuestaDecodificada); //TODO mantener usuario en  sharedpreferences
       return null;
     } else {
       return respuestaDecodificada['error']['message'];
@@ -90,6 +96,7 @@ class AuthService extends ChangeNotifier{
 
   Future logOut() async {
     await storage.delete(key: 'idToken');
+    Preferences.correo = '';
     return; 
   }
 

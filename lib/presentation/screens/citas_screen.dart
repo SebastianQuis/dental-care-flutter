@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
  
+import 'package:dental_care_app/domain/entities/entities.dart';
 import 'package:dental_care_app/config/services/services.dart';
+import 'package:dental_care_app/presentation/helpers/preferences.dart';
 import 'package:dental_care_app/presentation/drawer/drawer_menu.dart';
 import 'package:dental_care_app/presentation/screens/screens.dart';
 import 'package:dental_care_app/presentation/widgets/widgets.dart';
@@ -13,12 +15,14 @@ class CitasScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final usuarioService = Provider.of<UsuarioService>(context);
+    final authService = Provider.of<AuthService>(context);
+    // usuarioService.buscarUsuarioByCorreo('mafer@gmail.com');
     
     return Scaffold(
 
       appBar: AppBar(),
       
-      drawer: DrawerMenu(),
+      drawer: const DrawerMenu(),
       
       body: SafeArea(
         child: SingleChildScrollView(
@@ -30,10 +34,13 @@ class CitasScreen extends StatelessWidget {
                 height: 130
               ),
 
-              TitleSubTitle(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                title: 'Bienvenido', 
-                subTitle: '${usuarioService.usuarioSeleccionado!.nombre} ${usuarioService.usuarioSeleccionado!.apellidos}'
+              FutureBuilder(
+                future: usuarioService.buscarUsuarioByCorreo(authService.usuario?.email ?? Preferences.correo),
+                builder: (context, snapshot) {
+                  if ( snapshot.hasError) return const Text('Cargando..'); 
+                  if ( !snapshot.hasData ) return const Text('Cargando..');
+                  return Titulo(usuario: snapshot.data!);
+                },
               ),
 
               SizedBox(height: 40,),
@@ -54,6 +61,20 @@ class CitasScreen extends StatelessWidget {
       )
 
 
+    );
+  }
+}
+
+class Titulo extends StatelessWidget {
+  final Usuario usuario;
+  const Titulo({super.key, required this.usuario});
+
+  @override
+  Widget build(BuildContext context) {
+    return TitleSubTitle(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      title: 'Bienvenido',
+      subTitle: '${usuario.nombre} ${usuario.apellidos}',
     );
   }
 }

@@ -22,7 +22,7 @@ class CargaScreen extends StatelessWidget {
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             
             if ( !snapshot.hasData ) {
-              return const Text('Espere');
+              return const Text('Cargando..');
             }
             
             if (snapshot.data == '') {
@@ -42,7 +42,7 @@ class CargaScreen extends StatelessWidget {
             }
 
 
-            return Container();
+            return Text('Cargando..');
           },
         ),
      ),
