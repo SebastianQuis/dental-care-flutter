@@ -13,43 +13,41 @@ class RecuperaClaveScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
+        child: Column(
+          children: [
 
 
-              Container(
-                alignment: Alignment.centerLeft,
-                width: double.infinity,
-                height: 70,
-                // color: Colors.green[100],
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }, 
-                  icon: Icon(Icons.arrow_back, color: Colors.black, size: 30,)
-                ),
+            Container(
+              alignment: Alignment.centerLeft,
+              width: double.infinity,
+              height: 70,
+              // color: Colors.green[100],
+              child: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                }, 
+                icon: Icon(Icons.arrow_back, color: Colors.black, size: 30,)
               ),
+            ),
 
-              LogoImage(
-                height: 220,
+            LogoImage(
+              height: 220,
+            ),
+
+            Padding(
+              padding: EdgeInsets.only( top: 20, bottom: 40),
+              child: TitleSubTitle(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                title: '¿Olvidaste tu contraseña?', 
+                subTitle: 'Ingresa tu correo electrónico y revisa tu correo para restablecer tu contraseña'
               ),
+            ),
 
-              Padding(
-                padding: EdgeInsets.only( top: 20, bottom: 40),
-                child: TitleSubTitle(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  title: '¿Olvidaste tu contraseña?', 
-                  subTitle: 'Ingresa tu correo electrónico y revisa tu correo para restablecer tu contraseña'
-                ),
-              ),
-
-              _Body(),
+            _Body(),
 
 
 
-            ],
-          ),
+          ],
         ),
       )
     );

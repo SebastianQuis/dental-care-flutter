@@ -39,7 +39,6 @@ class MyApp extends StatelessWidget {
       scaffoldMessengerKey: NotificacionService.messengerKey,
       debugShowCheckedModeBanner: false,
       title: 'Dental Care App',
-      home: LoginScreen(),
       theme: ThemeData(
         useMaterial3: true,
         colorSchemeSeed: const Color(0XFF3d8af7),

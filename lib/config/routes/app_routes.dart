@@ -1,24 +1,11 @@
 
-import 'package:dental_care_app/presentation/screens/carga_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'package:dental_care_app/presentation/screens/citas_programadas_doc_screen.dart';
-import 'package:dental_care_app/presentation/screens/citas_screen.dart';
-import 'package:dental_care_app/presentation/screens/historial_doc_screen.dart';
-import 'package:dental_care_app/presentation/screens/historial_screen.dart';
-import 'package:dental_care_app/presentation/screens/metodo_pago_screen.dart';
-import 'package:dental_care_app/presentation/screens/new_cita_screen.dart';
-import 'package:dental_care_app/presentation/screens/notificacion_cita_screen.dart';
-import 'package:dental_care_app/presentation/screens/perfil_screen.dart';
-import 'package:dental_care_app/presentation/screens/recupera_clave.dart';
-import 'package:dental_care_app/presentation/screens/registro_usuario_screen.dart';
-import 'package:dental_care_app/presentation/screens/login_screen.dart';
-
+import 'package:dental_care_app/presentation/screens/screens.dart';
 
 class AppRoutes {
 
   static String initialRoute = CargaScreen.nombre;
-
   
   static Map<String, Widget Function(BuildContext)> getAppRoutes() {
 
