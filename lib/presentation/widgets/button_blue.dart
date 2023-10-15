@@ -13,11 +13,11 @@ class ButtonBlue extends StatelessWidget {
         minimumSize: Size(double.infinity, 45),
         backgroundColor: Colors.blue[700],
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0), // Ajusta el valor para cambiar la cantidad de redondeo
+          borderRadius: BorderRadius.circular(8.0),
         ),
       ),
       onPressed: onPressed, 
-      child: Text(nombre, style: TextStyle(color: Colors.white),)
+      child: Text(nombre, style: TextStyle(color: Colors.white, fontSize: 18),)
     );
   }
 }

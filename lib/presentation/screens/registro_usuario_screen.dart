@@ -32,7 +32,7 @@ class RegistroUsuarioScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.pop(context);
                   }, 
-                  icon: Icon(Icons.arrow_back, color: Colors.black, size: 30,)
+                  icon: const Icon(Icons.arrow_back, color: Colors.black, size: 30,)
                 ),
               ),
 
@@ -219,8 +219,6 @@ class _BodyRegistroState extends State<BodyRegistro> {
                     nombre: loginForm.nombre!, 
                     password: loginForm.contrasenia
                   );
-
-                  print(newUsuario.toJson());
 
                   if (isSaveSesion) {
                     final String? token = await authServiceProvider.createUser(loginForm.usuario, loginForm.contrasenia);

@@ -12,4 +12,5 @@ export 'package:dental_care_app/presentation/screens/notificacion_cita_screen.da
 export 'package:dental_care_app/presentation/screens/perfil_screen.dart';
 export 'package:dental_care_app/presentation/screens/recupera_clave.dart';
 export 'package:dental_care_app/presentation/screens/registro_usuario_screen.dart';
+export 'package:dental_care_app/presentation/screens/cita_reprograma_screen.dart';
 

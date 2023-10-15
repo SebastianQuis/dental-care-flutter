@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
 import 'package:dental_care_app/presentation/screens/citas_screen.dart';
+import 'package:dental_care_app/presentation/helpers/date_to_string.dart';
+import 'package:dental_care_app/presentation/providers/cita_form_provider.dart';
 import 'package:dental_care_app/presentation/widgets/widgets.dart';
  
 class NotificacionScreenScreen extends StatelessWidget {
   static const nombre = 'notificacionScreen';
+  const NotificacionScreenScreen({super.key});
   
   @override
   Widget build(BuildContext context) {
@@ -14,7 +19,7 @@ class NotificacionScreenScreen extends StatelessWidget {
 
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
           
@@ -22,15 +27,14 @@ class NotificacionScreenScreen extends StatelessWidget {
                 height: 130
               ),
 
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
           
               TitleSubTitle(
                 horizontal: 20,
                 title: 'Notificación'
               ),
           
-              BodyNotificacion(),
-              
+              const BodyNotificacion(),
           
             ],
           )
@@ -45,10 +49,12 @@ class BodyNotificacion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final citaForm = Provider.of<CitaFormProvider>(context);
+    DateTime? fecha = parseStringDateTime(citaForm.fecha);
+
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      // color: Colors.red[100],
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -56,16 +62,15 @@ class BodyNotificacion extends StatelessWidget {
           TitleSubTitle(
             horizontal: 0,
             title: 'Cita reservada',
-            subTitle: 'Paciente: Ruth R.',
+            subTitle: 'Paciente: ${citaForm.paciente}',
           ),
 
           Container(
             width: 100,
             height: 100,
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(100)),
-              // color: Colors.red,
               image: DecorationImage(
                 image: AssetImage('assets/images/patient-icon.jpg'),
                 fit: BoxFit.fill,
@@ -73,10 +78,13 @@ class BodyNotificacion extends StatelessWidget {
             ),
           ),
 
-          Text('Fecha: 27/09/23'),
-          Text('Hora: 3pm - 4pm'),
+          Text('Fecha: ${formatDateCalendar(fecha!)} ${fecha.month} del ${fecha.year}'),
+          Text('Hora: ${citaForm.horario1 ? '3:00 pm - 4:00 pm' 
+            : (citaForm.horario2 ? '5:00 pm - 6:00 pm' 
+            : (citaForm.horario3 ? '7:00 pm - 8:00 pm' 
+            : 'Ninguno'))}'),
 
-          SizedBox(height: 20,),
+          const SizedBox(height: 20,),
 
           TitleSubTitle(
             horizontal: 0,
@@ -86,7 +94,7 @@ class BodyNotificacion extends StatelessWidget {
           Container(
             width: 100,
             height: 100,
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(100)),
               // color: Colors.red,
@@ -97,10 +105,10 @@ class BodyNotificacion extends StatelessWidget {
             ),
           ),
 
-          Text('Dr. Juan M.'),
+          const Text('Dr. Marcelo Perez'),
 
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
+            padding: const EdgeInsets.symmetric(vertical: 20),
             child: ButtonBlue(
               onPressed: () {
                 Navigator.pushReplacementNamed(context, CitasScreen.nombre);

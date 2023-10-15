@@ -23,6 +23,7 @@ class AppRoutes {
     appRoutes.addAll( { CitasProgramadasDocScreen.nombre   : ( _ ) => CitasProgramadasDocScreen()});
     appRoutes.addAll( { HistorialDocScreen.nombre          : ( _ ) => HistorialDocScreen()});
     appRoutes.addAll( { CargaScreen.nombre                 : ( _ ) => CargaScreen()});
+    appRoutes.addAll( { CitaReprogramaScreen.nombre        : ( _ ) => CitaReprogramaScreen()});
 
     return appRoutes;
   }

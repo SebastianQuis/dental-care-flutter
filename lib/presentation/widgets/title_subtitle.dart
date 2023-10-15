@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class TitleSubTitle extends StatelessWidget {
   final String title;
   String subTitle;
@@ -22,13 +21,12 @@ class TitleSubTitle extends StatelessWidget {
     return Container(
       width: double.infinity,
       margin: EdgeInsets.symmetric(horizontal: horizontal, vertical: vertical),
-      // color: Colors.red,
       child: Column(
         crossAxisAlignment: crossAxisAlignment,
         children: [
-          Text(title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),),
+          Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),),
           if ( subTitle.isNotEmpty ) 
-            Text(subTitle),
+            Text(subTitle, style: const TextStyle(fontSize: 18),),
         ],
       ),
     );

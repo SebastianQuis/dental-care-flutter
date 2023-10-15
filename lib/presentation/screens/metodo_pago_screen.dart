@@ -1,10 +1,17 @@
+
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
+import 'package:dental_care_app/domain/entities/entities.dart';
+import 'package:dental_care_app/config/services/services.dart';
+import 'package:dental_care_app/presentation/providers/providers.dart';
 import 'package:dental_care_app/presentation/screens/screens.dart';
 import 'package:dental_care_app/presentation/widgets/widgets.dart';
  
 class MetodoPagoScreen extends StatelessWidget {
   static const nombre = 'metodoPagoScreen';
+  const MetodoPagoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +39,8 @@ class MetodoPagoScreen extends StatelessWidget {
           
             ],
           ),
-        )),
+        )
+      ),
     );
   }
 }
@@ -50,12 +58,11 @@ class _TipoPagoState extends State<TipoPago> {
   
   @override
   Widget build(BuildContext context) {
-    // final size = MediaQuery.of(context).size;
-    
+    final citaForm = Provider.of<CitaFormProvider>(context);
+    final citaService = Provider.of<CitaService>(context);
+
     return Container(
-      // color: Colors.green,
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      // width: size.width * 0.9,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -99,21 +106,44 @@ class _TipoPagoState extends State<TipoPago> {
           const SizedBox(height: 40,),
 
           ButtonBlue(
-            onPressed: () {
-              mostrarAlerta(
-                context, 
-                'Mensaje', 
-                'Ruth, tu reserva se realizó con éxito', 
-                [
-                  MaterialButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, NotificacionScreenScreen.nombre);
-                    },
-                    elevation: 5,
-                    textColor: Colors.blue,
-                    child: const Text('Ok'),
-                  ),
-                ]);
+            onPressed: () async {
+              
+              if (selectedCheckBox == -1) {
+                NotificacionService.showSnackBar('Debe seleccionar un método de pago', Colors.red);
+              } else {
+                final newCita = Cita(
+                  fecha   : citaForm.fecha, 
+                  paciente: citaForm.paciente,
+                  horario1: citaForm.horario1,
+                  horario2: citaForm.horario2,
+                  horario3: citaForm.horario3,
+                  diagnostico: '',
+                  recomendaciones: '',
+                );
+                
+                await Future.delayed(const Duration(seconds: 1));
+                String? token = await citaService.crearCita(newCita);
+                citaForm.isLoading = false;
+
+                if (token == null) {
+                  NotificacionService.showSnackBar('Error al registrar', Colors.red);
+                  citaForm.isLoading = false;
+                } else {
+                  // ignore: use_build_context_synchronously
+                  mostrarAlerta( context, 'Mensaje', '${citaForm.paciente}, tu reserva se realizó con éxito', 
+                    [
+                      MaterialButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, NotificacionScreenScreen.nombre);
+                        },
+                        elevation: 5,
+                        textColor: Colors.blue,
+                        child: const Text('Ok'),
+                      ),
+                    ]
+                  );
+                }
+              }
             }, 
             nombre: 'Confirmar pago'
           ),

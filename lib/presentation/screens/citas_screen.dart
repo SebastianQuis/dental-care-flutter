@@ -9,14 +9,15 @@ import 'package:dental_care_app/presentation/drawer/drawer_menu.dart';
 import 'package:dental_care_app/presentation/screens/screens.dart';
 import 'package:dental_care_app/presentation/widgets/widgets.dart';
 
+
 class CitasScreen extends StatelessWidget {
   static const nombre = 'citasScreen';
+  const CitasScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final usuarioService = Provider.of<UsuarioService>(context);
     final authService = Provider.of<AuthService>(context);
-    // usuarioService.buscarUsuarioByCorreo('mafer@gmail.com');
     
     return Scaffold(
 
@@ -26,7 +27,7 @@ class CitasScreen extends StatelessWidget {
       
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
 
@@ -39,22 +40,23 @@ class CitasScreen extends StatelessWidget {
                 builder: (context, snapshot) {
                   if ( snapshot.hasError) return const Text('Cargando..'); 
                   if ( !snapshot.hasData ) return const Text('Cargando..');
-                  return Titulo(usuario: snapshot.data!);
+                  usuarioService.usuarioLogeado = snapshot.data;
+                  return Column(
+                    children: [
+
+                      Titulo(usuario: usuarioService.usuarioLogeado!),
+
+                      const SizedBox(height: 20,),
+
+                      _MisCitas(usuario: usuarioService.usuarioLogeado!),
+                      
+                      _ProgramarCita(usuario: usuarioService.usuarioLogeado!),
+                    
+                      _RepogramarCita(),
+                    ],
+                  );
                 },
               ),
-
-              SizedBox(height: 40,),
-
-              _MisCitas(),
-
-              Divider(),
-
-              // SizedBox(height: 20,),
-              
-              _ProgramarCita(),
-
-              // _ReprogramarCita(),
-
             ],
           ),
         )
@@ -80,41 +82,90 @@ class Titulo extends StatelessWidget {
 }
 
 class _ProgramarCita extends StatelessWidget {
-  const _ProgramarCita({super.key});
+  final Usuario usuario;
+  const _ProgramarCita({required this.usuario});
 
   @override
   Widget build(BuildContext context) {
+    final citaService = Provider.of<CitaService>(context);
+
     return GestureDetector(
       onTap: () {
+        final hoy = DateTime.now().toString().split(' ')[0];
+        
+        citaService.citaSeleccionada = Cita(
+          fecha: hoy,
+          paciente: '${usuario.nombre} ${usuario.apellidos}'
+        );
+
         Navigator.pushNamed(context, NewCitaScreen.nombre);
       },
-      child: Container(
-        // color: Colors.red,
-        child: Column(
-          children: [
-            IconAndTitle(
-              iconData: Icons.new_label_outlined, 
-              title: 'Programar cita'
-            )
-          ],
-        ),
+      child: const IconAndTitle(
+        iconData: Icons.new_label_outlined, 
+        title: 'Programar cita', 
+        description: 'Selecciona la fecha y hora de tu próxima cita',
       ),
     );
   }
 }
 
 class _MisCitas extends StatelessWidget {
-  const _MisCitas({super.key});
+  final Usuario usuario;
+  const _MisCitas({required this.usuario});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          IconAndTitle(iconData: Icons.calendar_month, title: 'Mis citas'),
+    final citaService = Provider.of<CitaService>(context);
+    final paciente = '${usuario.nombre} ${usuario.apellidos}';
+  
+    return FutureBuilder(
+      future: citaService.obtenerCitaPorPaciente(paciente),
+      builder: (context, snapshot) {
+        if ( snapshot.hasError) return const Center(child: Text('Cargando..')); 
+        if ( !snapshot.hasData ) return const Center(child: Text('Cargando..'));
+        
+        return snapshot.data!.isEmpty
+          ? const IconAndTitle(iconData: Icons.calendar_month, title: 'Proxima cita', description: 'Sin citas.')
+          : MiCita(listCitas: snapshot.data!);
+      },
+    );
+  }
+}
 
-          Text('Ultima cita programa, doctor, hora, cita, fecha')
-      ]),
+class MiCita extends StatelessWidget {
+  final List<Cita> listCitas;
+  const MiCita({super.key, required this.listCitas});
+
+  @override
+  Widget build(BuildContext context) {
+    final citaService = Provider.of<CitaService>(context);
+
+    Cita? cita = listCitas[listCitas.length - 1];
+    citaService.citaReprogramar = cita;
+    final horario = (cita.horario1!) ? '3:00 pm a 4:00 pm' : (cita.horario2!) ? '5:00 pm a 6:00 pm' : (cita.horario3!) ? '7:00 pm a 8:00 pm' : 'Sin asignar';
+    
+    return IconAndTitle(
+      iconData: Icons.calendar_month, 
+      title: 'Próxima cita', 
+      description: 'Tu cita pendiente es el ${cita.fecha} de $horario',
+    );
+  }
+}
+
+class _RepogramarCita extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, CitaReprogramaScreen.nombre);
+      },
+      child: const IconAndTitle(
+        iconData: Icons.calendar_month_rounded, 
+        title: 'Reprogramar cita', 
+        description: 'Modifique la fecha su última cita registrada',
+      )
     );
   }
 }
@@ -122,21 +173,32 @@ class _MisCitas extends StatelessWidget {
 class IconAndTitle extends StatelessWidget {
   final IconData iconData;
   final String title;
+  final String description;
 
-  const IconAndTitle({super.key, required this.iconData, required this.title});
+  const IconAndTitle({
+    super.key, 
+    required this.iconData, 
+    required this.title, 
+    required this.description
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       child: Column(
         children: [
+    
+          Icon(iconData, size: 30, color: Colors.blue,),
+    
+          Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+      
+          Text(description, style: const TextStyle(fontSize: 16),),
 
-          Icon(iconData, size: 40, color: Colors.blue,),
-
-          Text(title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
-  
-          Text('Selecciona la fecha y hora de tu próxima cita'),
-
+          const SizedBox(height: 5,),
+          
+          const Divider(),
+    
         ],
       ),
     );

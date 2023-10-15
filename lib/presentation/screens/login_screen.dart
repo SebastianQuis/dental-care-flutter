@@ -17,7 +17,6 @@ class LoginScreen extends StatelessWidget {
  
   @override
   Widget build(BuildContext context) {
-    // final authServiceProvider = Provider.of<AuthService>(context);
    
     return Scaffold(
       body: SafeArea(
@@ -64,13 +63,6 @@ class BodyLogin extends StatefulWidget {
 class _BodyLoginState extends State<BodyLogin> {
   bool isSaveSesion = false;
   bool _obscureText = true;
-  // FocusNode _focusNode = FocusNode();
-
-  // @override
-  // void initState() {
-  //   _focusNode.requestFocus();
-  //   super.initState();
-  // }
   
   @override
   Widget build(BuildContext context) {
@@ -80,8 +72,6 @@ class _BodyLoginState extends State<BodyLogin> {
 
     return Container(
       width: double.infinity,
-      // height: 300,
-      // color: Colors.red,
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: Form(
         key: loginForm.formKey,
@@ -150,15 +140,13 @@ class _BodyLoginState extends State<BodyLogin> {
                 : () async {
                   FocusScope.of(context).unfocus();
                   if (!loginForm.isValidForm()) return;
-      
                   loginForm.isLoading = true;
       
                   await Future.delayed(const Duration(seconds: 1));
-      
-                  loginForm.isLoading = false;
-      
                   final String? token = await authServiceProvider.login(loginForm.usuario, loginForm.contrasenia, isSaveSesion);
-      
+
+                  loginForm.isLoading = false;
+
                   if (token == null) {
                     NotificacionService.showSnackBar('Bienvenido!!', Colors.black45);
                     Navigator.pushReplacementNamed(context, CitasScreen.nombre);
@@ -166,7 +154,6 @@ class _BodyLoginState extends State<BodyLogin> {
                     NotificacionService.showSnackBar('Cuenta no existe', Colors.red);
                     loginForm.isLoading = false;
                   }
-
                 },
               nombre: 'Inicia sesión'
             ),

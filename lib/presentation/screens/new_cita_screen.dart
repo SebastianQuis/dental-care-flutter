@@ -1,31 +1,37 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
 import 'package:dental_care_app/presentation/screens/screens.dart';
+import 'package:dental_care_app/presentation/helpers/date_to_string.dart';
+import 'package:dental_care_app/presentation/providers/cita_form_provider.dart';
+import 'package:dental_care_app/config/services/services.dart';
 import 'package:dental_care_app/presentation/widgets/widgets.dart';
  
 class NewCitaScreen extends StatelessWidget {
   static const nombre = 'newCitaScreen';
+  const NewCitaScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+    
       appBar: AppBar(),
-
+    
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-
+    
               LogoImage(
                 height: 130
               ),
-
-              PacienteDoctor(),
-
-              CalendarHorario(),
-
+    
+              const PacienteDoctor(),
+    
+              const CalendarHorario(),
+    
             ],
           ),
         )
@@ -42,19 +48,18 @@ class CalendarHorario extends StatefulWidget {
 }
 
 class _CalendarHorarioState extends State<CalendarHorario> {
-
-  DateTime? selectedDate;
-  // bool firstActive = false;
-  // bool secondActive = false;
-  // bool thirdActive = false;
   int selectedCheckBox = -1;
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     
-    Future<DateTime?> pickDate() => showDatePicker(
-      context: context,
+    final citaService = Provider.of<CitaService>(context);
+    final citaForm = Provider.of<CitaFormProvider>(context);
+    
+    final citaSeleccionada = citaService.citaSeleccionada;
+    
+    Future<DateTime?> pickDate() => showDatePicker(context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1950),
       lastDate: DateTime(2030),
@@ -62,91 +67,109 @@ class _CalendarHorarioState extends State<CalendarHorario> {
 
     return Container(
       width: double.infinity,
-      // color: Colors.red,
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: [
-
-          TitleSubTitle(title: 'Fecha', horizontal: 0, vertical: 10),
-          
-          ButtonBlue(
-            onPressed: () async {
-              DateTime? date = await pickDate();
-              if (date == null) return;
-              selectedDate = date;
-              setState(() {});
-            }, 
-            nombre: selectedDate != null ? selectedDate.toString().split(' ')[0] : 'Seleccionar fecha'
-          ),
-
-          TitleSubTitle(title: 'Horario', horizontal: 0, vertical: 10),
-
-          CheckboxListTile(
-            title: const Text('3 pm a 4 pm'),
-            value: selectedCheckBox == 0,
-            onChanged: (value) {
-              // firstActive = value!;
-              selectedCheckBox = 0;
-              setState(() {});
-            },
-            controlAffinity: ListTileControlAffinity.leading,
-          ),
-          
-          CheckboxListTile(
-            title: const Text('5 pm a 6 pm'),
-            value: selectedCheckBox == 1,
-            onChanged: (value) {
-              // secondActive = value!;
-              selectedCheckBox = 1;
-              setState(() {});
-            },
-            controlAffinity: ListTileControlAffinity.leading,
-          ),
-          
-          CheckboxListTile(
-            title: const Text('7 pm a 8 pm'),
-            value: selectedCheckBox == 2,
-            onChanged: (value) {
-              // thirdActive = value!;
-              selectedCheckBox = 2;
-              setState(() {});
-            },
-            controlAffinity: ListTileControlAffinity.leading,
-          ),
-
-
-          Container(
-            padding: const EdgeInsets.symmetric( vertical: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-          
-                SizedBox(
-                  width: size.width *0.4,
-                  child: ButtonBlue(
-                    onPressed: () {
-                      // print(selectedCheckBox);
-                      Navigator.pushNamed(context, MetodoPagoScreen.nombre);
-                    }, 
-                    nombre: 'Aceptar'
-                  ),
-                ),
-                SizedBox(
-                  width: size.width *0.4,
-                  child: ButtonBlue(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    }, 
-                    nombre: 'Regresar'
-                  ),
-                ),
-                
-          
-              ],
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Form(
+        key: citaForm.formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: Column(
+          children: [
+      
+            TitleSubTitle(title: 'Fecha', horizontal: 0, vertical: 10),
+            
+            ButtonBlue(
+              onPressed: () async {
+                DateTime? date = await pickDate();
+                if (date == null) return;
+                citaService.selectedDate = date;
+                citaForm.fecha = parseDateTimeString(citaService.selectedDate!);
+                setState(() {});
+              }, 
+              nombre: citaService.selectedDate != null 
+                ? '${formatDateCalendar(citaService.selectedDate!)} ${citaService.selectedDate!.day} del ${citaService.selectedDate!.month} de ${citaService.selectedDate!.year}'
+                : 'Seleccionar fecha'
             ),
-          )
+      
+            TitleSubTitle(title: 'Horario', horizontal: 0, vertical: 10),
+      
+            CheckboxListTile(
+              title: const Text('3 pm a 4 pm'),
+              value: selectedCheckBox == 0,
+              onChanged: (value) {
+                if (value != null) {
+                  citaForm.actualizaHorario1(value);
+                  selectedCheckBox = 0; // Deseleccionar todos los demás
+                } else {
+                  selectedCheckBox = -1;
+                }                 
+                setState(() {});
+              },
+              controlAffinity: ListTileControlAffinity.leading,
+            ),
+            
+            CheckboxListTile(
+              title: const Text('5 pm a 6 pm'),
+              value: selectedCheckBox == 1,
+              onChanged: (value) {
+                if (value != null) {
+                  citaForm.actualizaHorario2(value);
+                  selectedCheckBox = 1; // Deseleccionar todos los demás
+                } else {
+                  selectedCheckBox = -1;
+                }          
+                setState(() {});
+              },
+              controlAffinity: ListTileControlAffinity.leading,
+            ),
+            
+            CheckboxListTile(
+              title: const Text('7 pm a 8 pm'),
+              value: selectedCheckBox == 2,
+              onChanged: (value) {
+                if (value != null) {
+                  citaForm.actualizaHorario3(value);
+                  selectedCheckBox = 2; // Deseleccionar todos los demás
+                } else {
+                  selectedCheckBox = -1;
+                }
+                setState(() {});
+              },
+              controlAffinity: ListTileControlAffinity.leading,
+            ),
+      
+            Container(
+              padding: const EdgeInsets.symmetric( vertical: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+            
+                  SizedBox(
+                    width: size.width *0.4,
+                    child: ButtonBlue(
+                      onPressed: (citaService.selectedDate != null && !citaService.isLoading)
+                        ? () async {
+                            citaForm.isLoading = true;
+                            citaForm.paciente = citaSeleccionada!.paciente;
+                            if (!citaForm.isValidForm()) return;
+                            Navigator.pushNamed(context, MetodoPagoScreen.nombre);
+                          }
+                        : null,
+                      nombre: 'Aceptar'
+                    ),
+                  ),
 
-        ],
+                  SizedBox(
+                    width: size.width *0.4,
+                    child: ButtonBlue(
+                    onPressed: () => Navigator.pop(context), 
+                    nombre: 'Regresar'
+                    ),
+                  ),
+                ],
+              ),
+            )
+      
+          ],
+        ),
       ),
     );
   }
@@ -157,7 +180,9 @@ class PacienteDoctor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final citaSeleccionada = Provider.of<CitaService>(context).citaSeleccionada;
+    
+    return SizedBox(
       width: double.infinity,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -166,13 +191,13 @@ class PacienteDoctor extends StatelessWidget {
           UserPersonal(
             icon: Icons.person_outline,
             image: 'assets/images/patient-icon.jpg',
-            title: 'Ruth R',
+            title: citaSeleccionada!.paciente,
           ),
           
-          UserPersonal(
+          const UserPersonal(
             icon: Icons.troubleshoot_sharp,
             image: 'assets/images/doctor-icon.jpg',
-            title: 'Marcelo P',
+            title: 'Marcelo Perez',
           ),
 
         ],
@@ -197,36 +222,31 @@ class UserPersonal extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Container(
-      child: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(100)),
-              // color: Colors.red,
-              image: DecorationImage(
-                image: AssetImage(image),
-                fit: BoxFit.fill,
-              ),
+    return Column(
+      children: [
+        
+        Container(
+          width: 100,
+          height: 100,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(100)),
+            image: DecorationImage(
+              image: AssetImage(image),
+              fit: BoxFit.fill,
             ),
           ),
+        ),
     
-          Container(
-            // color: Colors.red,
-            width: size.width * 0.4,
-            height: 60,
-            child: ListTile(
-              title: Text(title),
-              leading: Icon(icon, color: Colors.blue,),
-            ),
+        SizedBox(
+          width: size.width * 0.4,
+          height: 60,
+          child: ListTile(
+            title: Text(title, style: const TextStyle(fontSize: 18),),
+            leading: Icon(icon, color: Colors.blue,),
           ),
+        ),
     
-        ],
-      ),
+      ],
     );
   }
 }

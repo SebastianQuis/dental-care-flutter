@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 
-import 'package:dental_care_app/domain/entities/usuario.dart';
+import 'package:dental_care_app/domain/entities/usuario_entitie.dart';
 
 class UsuarioService extends ChangeNotifier {
 
@@ -14,36 +14,41 @@ class UsuarioService extends ChangeNotifier {
   bool isLoading = true;
 
   Future<String?> crearUsuario(Usuario usuario) async {
-    final url = Uri.https(_baseURL, 'usuario.json');
+    try {
+      isLoading = true;
+      final url = Uri.https(_baseURL, 'usuario.json');
+      final respuesta = await http.post(url, body: usuario.toRawJson());
+      final dataDecodificada = jsonDecode(respuesta.body);
 
-    final respuesta = await http.post(url, body: usuario.toRawJson());
-    final dataDecodificada = jsonDecode(respuesta.body);
+      usuario.id = dataDecodificada['name']; // name es el id del usuario que crea por defecto firebase
+      isLoading = false;
 
-    usuario.id = dataDecodificada['name']; // name es el id del usuario que crea por defecto firebase
-
-    return usuario.id!;
+      return usuario.id!;  
+    } catch (e) {
+      return null;
+    }
+    
   }
 
   Future<Usuario?> buscarUsuarioByCorreo(String email) async {
-    final url = Uri.https(_baseURL, 'usuario.json', {
-      "orderBy": '"email"',
-      "equalTo": '"$email"',
-    });
-
-    final respuesta = await http.get(url);
-    
-    if (respuesta.statusCode == 200) {
-      final dataDecodificada = jsonDecode(respuesta.body);
-      // print(dataDecodificada);
-      final id = dataDecodificada.keys.first;
-      usuarioLogeado = Usuario.fromJson(dataDecodificada[id]);
-      return usuarioLogeado;
-    } else {
+    try {
+      final url = Uri.https(_baseURL, 'usuario.json', {
+        "orderBy": '"email"',
+        "equalTo": '"$email"',
+      });
+      final respuesta = await http.get(url);
+      
+      if (respuesta.statusCode == 200) {
+        final dataDecodificada = jsonDecode(respuesta.body);
+        final id = dataDecodificada.keys.first;
+        usuarioLogeado = Usuario.fromJson(dataDecodificada[id]);
+        return usuarioLogeado;
+      } else {
+        return null;
+      } 
+    } catch (e) {
       return null;
     }
   }
-
-
-
 
 }
