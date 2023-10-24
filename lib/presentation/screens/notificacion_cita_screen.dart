@@ -78,7 +78,7 @@ class BodyNotificacion extends StatelessWidget {
             ),
           ),
 
-          Text('Fecha: ${formatDateCalendar(fecha!)} ${fecha.month} del ${fecha.year}'),
+          Text('${formatDateCalendar(fecha!)} ${fecha.day} de ${fomatMonthCalendar(fecha.month.toString())}', style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 18 ),),
           Text('Hora: ${citaForm.horario1 ? '3:00 pm - 4:00 pm' 
             : (citaForm.horario2 ? '5:00 pm - 6:00 pm' 
             : (citaForm.horario3 ? '7:00 pm - 8:00 pm' 

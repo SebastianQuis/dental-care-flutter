@@ -13,9 +13,9 @@ class DrawerMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final usuarioService = Provider.of<UsuarioService>(context);
     final usuarioLogeado = usuarioService.usuarioLogeado;
-    
     final authService = Provider.of<AuthService>(context);
     final usuario = authService.usuario;
+
 
     return Drawer(
       child: SafeArea(
@@ -43,52 +43,64 @@ class DrawerMenu extends StatelessWidget {
         
             const SizedBox(height: 10,),
             
-        
-            ListTile(
-              leading: const Icon(Icons.calendar_today_outlined, ),
-              title: const Text('Mis citas'),
-              onTap: () {
-                Navigator.pushNamed(context, CitasScreen.nombre);
-              },
-              trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.person_outline,),
-              title: const Text('Mis perfil'),
-              onTap: () {
-                Navigator.pushNamed(context, PerfilScreen.nombre);
-              },
-              trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.note_add_outlined, ),
-              title: const Text('Historial dental'),
-              onTap: () {
-                Navigator.pushNamed(context, HistorialScreen.nombre);
-              },
-              trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.calendar_today_outlined),
-              title: const Text('Citas programadas'),
-              onTap: () {
-                Navigator.pushNamed(context, CitasProgramadasDocScreen.nombre);
-              },
-              trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.note_add_outlined, ),
-              title: const Text('Historial dental'),
-              onTap: () {
-                Navigator.pushNamed(context, HistorialDocScreen.nombre);
-              },
-              trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
-            ),
-            const Divider(),
+            if( usuarioLogeado.email != 'admin@gmail.com')
+              Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.calendar_today_outlined, ),
+                    title: const Text('Mis citas'),
+                    onTap: () {
+                      Navigator.pushNamed(context, CitasScreen.nombre);
+                    },
+                    trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: const Icon(Icons.person_outline,),
+                    title: const Text('Mis perfil'),
+                    onTap: () {
+                      Navigator.pushNamed(context, PerfilScreen.nombre);
+                    },
+                    trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: const Icon(Icons.note_add_outlined, ),
+                    title: const Text('Historial dental'),
+                    onTap: () {
+                      Navigator.pushNamed(context, HistorialScreen.nombre);
+                    },
+                    trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
+                  ),
+                  const Divider(),
+                ],
+              ),
+            
+
+            if( usuarioLogeado.email == 'admin@gmail.com')
+              Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.calendar_today_outlined),
+                    title: const Text('Citas programadas'),
+                    onTap: () {
+                      Navigator.pushNamed(context, CitasProgramadasDocScreen.nombre);
+                    },
+                    trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: const Icon(Icons.note_add_outlined, ),
+                    title: const Text('Historial dental'),
+                    onTap: () {
+                      Navigator.pushNamed(context, HistorialDocScreen.nombre);
+                    },
+                    trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 20,) ,
+                  ),
+                  const Divider(),
+                ],
+              ),
+            
         
             const Spacer(),
         

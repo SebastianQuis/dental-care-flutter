@@ -15,6 +15,8 @@ class CitaService extends ChangeNotifier {
   DateTime? selectedDate;
   bool isLoading = false;
 
+  final now = DateTime.now();
+
   Future<String?> crearCita(Cita cita) async {
     try {
       isLoading = true;
@@ -31,11 +33,32 @@ class CitaService extends ChangeNotifier {
     }
   }
 
-  Future<List<Cita>> obtenerCitaPorPaciente(String paciente) async {
+  Future<List<Cita>> obtenerCitaPorPacienteEspecifico(String paciente) async {
     try {
       final url = Uri.https(_baseURL, 'citas.json',{
         "orderBy": '"paciente"',
         "equalTo": '"$paciente"',
+      });
+
+      final respuesta = await http.get(url);
+      if (respuesta.statusCode == 200) {
+        final data = json.decode(respuesta.body);
+        final listCita = convertirMapaACitas(data);
+        return listCita;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      return  [];
+    }
+  }
+  
+  Future<List<Cita>> obtenerCitsaPorPaciente(String paciente) async {
+    try {
+      final url = Uri.https(_baseURL, 'citas.json',{
+        "orderBy" : '"paciente"',
+        "startAt" : '"$paciente"',
+        "endAt"   : '"$paciente\uf8ff"',
       });
 
       final respuesta = await http.get(url);
@@ -60,11 +83,25 @@ class CitaService extends ChangeNotifier {
       isLoading = false;
       return 'ok';
     } catch (e) {
-      print(e);
       return e.toString();
     }
-
   }
 
+  Future<List<Cita>> obtenerCitas() async {
+    try {
+      final url = Uri.https(_baseURL, 'citas.json');
+      final respuesta = await http.get(url);
+      
+      if (respuesta.statusCode == 200) {
+        final data = json.decode(respuesta.body);
+        final listCita = convertirMapaACitas(data);
+        return listCita;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      return  [];
+    }
+  }
 
 }

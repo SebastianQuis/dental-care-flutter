@@ -6,7 +6,7 @@ class InputForm extends StatelessWidget {
   final bool obscureText;
   final void Function(String)? onChanged;
   final String? Function(String?)? validator;
-  final String hintText;
+  String? hintText;
   String? labelText;
   Widget? suffixIcon;
   bool? enabled;
@@ -19,7 +19,7 @@ class InputForm extends StatelessWidget {
     this.obscureText = false, 
     this.onChanged, 
     this.validator, 
-    required this.hintText, 
+    this.hintText, 
     this.labelText, 
     this.suffixIcon,
     this.enabled = true,
@@ -52,7 +52,7 @@ class InputForm extends StatelessWidget {
         // },
         // autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
-          hintText: hintText,
+          hintText: hintText ?? '',
           labelText: labelText,
           labelStyle: const TextStyle(color: Colors.blue),
           floatingLabelBehavior: FloatingLabelBehavior.always,

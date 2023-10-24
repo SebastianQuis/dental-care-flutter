@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
  
 import 'package:dental_care_app/domain/entities/entities.dart';
 import 'package:dental_care_app/config/services/services.dart';
+import 'package:dental_care_app/presentation/helpers/date_to_string.dart';
 import 'package:dental_care_app/presentation/helpers/preferences.dart';
 import 'package:dental_care_app/presentation/drawer/drawer_menu.dart';
 import 'package:dental_care_app/presentation/screens/screens.dart';
@@ -119,7 +120,7 @@ class _MisCitas extends StatelessWidget {
     final paciente = '${usuario.nombre} ${usuario.apellidos}';
   
     return FutureBuilder(
-      future: citaService.obtenerCitaPorPaciente(paciente),
+      future: citaService.obtenerCitaPorPacienteEspecifico(paciente),
       builder: (context, snapshot) {
         if ( snapshot.hasError) return const Center(child: Text('Cargando..')); 
         if ( !snapshot.hasData ) return const Center(child: Text('Cargando..'));
@@ -141,13 +142,14 @@ class MiCita extends StatelessWidget {
     final citaService = Provider.of<CitaService>(context);
 
     Cita? cita = listCitas[listCitas.length - 1];
+    final fecha = parseStringDateTime(cita.fecha!);
     citaService.citaReprogramar = cita;
     final horario = (cita.horario1!) ? '3:00 pm a 4:00 pm' : (cita.horario2!) ? '5:00 pm a 6:00 pm' : (cita.horario3!) ? '7:00 pm a 8:00 pm' : 'Sin asignar';
     
     return IconAndTitle(
       iconData: Icons.calendar_month, 
       title: 'Próxima cita', 
-      description: 'Tu cita pendiente es el ${cita.fecha} de $horario',
+      description: 'Tu cita pendiente es el ${formatDateCalendar(fecha!)} ${fecha.day} de ${fomatMonthCalendar(fecha.month.toString())} de $horario',
     );
   }
 }

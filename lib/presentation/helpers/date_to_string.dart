@@ -1,8 +1,6 @@
 import 'package:dental_care_app/domain/entities/cita_entitie.dart';
 import 'package:intl/intl.dart';
 
-
-
 String parseDateTimeString(DateTime dateTime) {
   DateFormat format = DateFormat('dd/MM/yyyy');
   return format.format(dateTime);
@@ -20,12 +18,10 @@ DateTime? parseStringDateTime(String dateTime) {
   }
 }
 
-
 String formatDateCalendar(DateTime day) {
   final diaDeLaSemana = day.weekday;
-
   String nombreDelDia = '';
-
+  
   switch (diaDeLaSemana) {
     case 1:
       nombreDelDia = 'Lunes';
@@ -53,6 +49,49 @@ String formatDateCalendar(DateTime day) {
   return nombreDelDia;
 }
 
+String fomatMonthCalendar(String month) {
+  String? nombreMes;
+  switch (month) {
+    case '1':
+      nombreMes = 'enero';
+      break;
+    case '2':
+      nombreMes = 'febrero';
+      break;
+    case '3':
+      nombreMes = 'marzo';
+      break;
+    case '4':
+      nombreMes = 'abril';
+      break;
+    case '5':
+      nombreMes = 'mayo';
+      break;
+    case '6':
+      nombreMes = 'junio';
+      break;
+    case '7':
+      nombreMes = 'julio';
+      break;
+    case '8':
+      nombreMes = 'agosto';
+      break;
+    case '9':
+      nombreMes = 'septiembre';
+      break;
+    case '10':
+      nombreMes = 'octubre';
+      break;
+    case '11':
+      nombreMes = 'noviembre';
+      break;
+    case '12':
+      nombreMes = 'diciembre';
+      break;
+  }
+
+  return nombreMes!;
+}
 
 List<Cita> convertirMapaACitas(Map<String, dynamic> mapa) {
   List<Cita> citas = [];
