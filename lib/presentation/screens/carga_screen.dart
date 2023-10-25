@@ -33,23 +33,14 @@ class CargaScreen extends StatelessWidget {
                   transitionDuration: const Duration(seconds: 1),
                 ));
               });
-            } 
-            
-            if (Preferences.correo != 'admin@gmail.com') {
+            } else {
               Future.microtask(() {
                 Navigator.pushReplacement(context, PageRouteBuilder(
                   pageBuilder: (_, __, ___) => FadeIn(child: CitasScreen()), 
                   transitionDuration: const Duration(seconds: 1),
                 ));
-              });
-            } else {
-              Future.microtask(() {
-                Navigator.pushReplacement(context, PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => FadeIn(child: CitasProgramadasDocScreen()), 
-                  transitionDuration: const Duration(seconds: 1),
-                ));
-              });
-            }
+              });  
+            } 
             return Text('Cargando..');
           },
         ),
