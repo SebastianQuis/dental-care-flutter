@@ -58,8 +58,6 @@ class AuthService extends ChangeNotifier{
 
     final respuesta = await http.post(url, body: json.encode(autenticacionData));
     final Map<String, dynamic> respuestaDecodificada = json.decode(respuesta.body);
-
-    // print(UsuarioResponse.fromJson(respuestaDecodificada));
     
     if (respuestaDecodificada.containsKey('idToken')) {
       if (savePassword == true) {

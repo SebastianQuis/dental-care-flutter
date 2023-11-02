@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
+import 'package:dental_care_app/domain/entities/entities.dart';
 import 'package:dental_care_app/presentation/drawer/drawer_menu.dart';
+import 'package:dental_care_app/config/services/services.dart';
 import 'package:dental_care_app/presentation/widgets/widgets.dart';
  
 class PerfilScreen extends StatelessWidget {
   static const nombre = 'perfilScreen';
+  const PerfilScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +18,11 @@ class PerfilScreen extends StatelessWidget {
         elevation: 0,
       ),
       
-      drawer: DrawerMenu(),
+      drawer: const DrawerMenu(),
       
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
 
@@ -25,10 +30,10 @@ class PerfilScreen extends StatelessWidget {
                 height: 130
               ),
 
-              Cabezera(),
+              const Cabezera(),
 
 
-              Body(),
+              const Body(),
 
             ],
           ),
@@ -43,9 +48,15 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final usuarioService = Provider.of<UsuarioService>(context);
+    final authService = Provider.of<AuthService>(context);
+    final usuarioLogueado = Provider.of<UsuarioService>(context).usuarioLogeado;
+
+    print('${authService.usuario!.idToken}');
+
     return Container(
       // color: Colors.green[100],
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
         children: [
 
@@ -65,23 +76,48 @@ class Body extends StatelessWidget {
           InputForm(
             textInputType: TextInputType.number, 
             labelText: 'Teléfono', 
-            hintText: '951353739'
+            hintText: usuarioLogueado!.celular,
+            onChanged: (value) => usuarioLogueado.celular = value,
           ),
           
           InputForm(
             textInputType: TextInputType.emailAddress, 
             labelText: 'Correo electrónico', 
-            hintText: 'ruth_r@gmail.com'
+            hintText: usuarioLogueado.email,
+            onChanged: (value) => usuarioLogueado.email = value,
           ),
 
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
+
+          Text('${usuarioService.isLoading}'),
+
 
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: ButtonBlue(
-              onPressed: () {
-                
-              }, 
+              onPressed: usuarioService.isLoading
+                ? null 
+                : () async {
+                  
+                  FocusScope.of(context).unfocus();
+                  // usuarioService.isLoading = true;
+                  final newUser = Usuario(
+                    apellidos: usuarioLogueado.apellidos,
+                    celular: usuarioLogueado.celular,
+                    email: usuarioLogueado.email, 
+                    nacimiento: usuarioLogueado.nacimiento, 
+                    nombre: usuarioLogueado.nombre, 
+                    password: usuarioLogueado.password,
+                    id: usuarioLogueado.id
+                  );
+
+                  String rspt = await usuarioService.actualizarUsuario(newUser);
+                  if (rspt == 'ok') {
+                    NotificacionService.showSnackBar('Actualizado correctamente', Colors.black45);
+                  } else {
+                    NotificacionService.showSnackBar('No se pudo actualizar', Colors.redAccent);
+                  }
+                },
               nombre: 'Actualizar'
             ),
           ),
@@ -116,7 +152,7 @@ class Cabezera extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
 
           TitleSubTitle(
             title: 'Mi perfil', 

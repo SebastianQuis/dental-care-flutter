@@ -1,16 +1,15 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:animate_do/animate_do.dart';
 
-import 'package:dental_care_app/presentation/helpers/preferences.dart';
 import 'package:dental_care_app/config/services/services.dart';
 import 'package:dental_care_app/presentation/screens/screens.dart';
 
  
 class CargaScreen extends StatelessWidget {
   static String nombre = 'cargaScreen';
+  const CargaScreen({super.key});
  
   @override
   Widget build(BuildContext context) {
@@ -36,12 +35,12 @@ class CargaScreen extends StatelessWidget {
             } else {
               Future.microtask(() {
                 Navigator.pushReplacement(context, PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => FadeIn(child: CitasScreen()), 
+                  pageBuilder: (_, __, ___) => FadeIn(child: const CitasScreen()), 
                   transitionDuration: const Duration(seconds: 1),
                 ));
               });  
             } 
-            return Text('Cargando..');
+            return const Text('Cargando..');
           },
         ),
      ),

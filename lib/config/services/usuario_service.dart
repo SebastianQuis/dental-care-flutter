@@ -11,7 +11,7 @@ class UsuarioService extends ChangeNotifier {
   final String _baseURL = 'flutter-dentalcare-default-rtdb.firebaseio.com';
                           
   Usuario? usuarioLogeado;
-  bool isLoading = true;
+  bool isLoading = false;
 
   Future<String?> crearUsuario(Usuario usuario) async {
     try {
@@ -42,6 +42,7 @@ class UsuarioService extends ChangeNotifier {
         final dataDecodificada = jsonDecode(respuesta.body);
         final id = dataDecodificada.keys.first;
         usuarioLogeado = Usuario.fromJson(dataDecodificada[id]);
+        usuarioLogeado?.id = id;
         return usuarioLogeado;
       } else {
         return null;
@@ -50,5 +51,20 @@ class UsuarioService extends ChangeNotifier {
       return null;
     }
   }
+
+  Future actualizarUsuario(Usuario usuario) async {
+    try {
+      isLoading = true;
+      final url = Uri.https(_baseURL,'usuario/${usuario.id}.json');
+      final respuesta = await http.put(url, body: usuario.toRawJson());
+      final dataDecodificada = jsonDecode(respuesta.body);
+      isLoading = false;
+      notifyListeners();
+      return 'ok';
+    } catch (e) {
+      return e.toString();
+    }
+  }
+  
 
 }

@@ -13,41 +13,44 @@ class RecuperaClaveScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-
-
-            Container(
-              alignment: Alignment.centerLeft,
-              width: double.infinity,
-              height: 70,
-              // color: Colors.green[100],
-              child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                }, 
-                icon: Icon(Icons.arrow_back, color: Colors.black, size: 30,)
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            children: [
+        
+        
+              Container(
+                alignment: Alignment.centerLeft,
+                width: double.infinity,
+                height: 70,
+                // color: Colors.green[100],
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }, 
+                  icon: const Icon(Icons.arrow_back, color: Colors.black, size: 30,)
+                ),
               ),
-            ),
-
-            LogoImage(
-              height: 220,
-            ),
-
-            Padding(
-              padding: EdgeInsets.only( top: 20, bottom: 40),
-              child: TitleSubTitle(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                title: '¿Olvidaste tu contraseña?', 
-                subTitle: 'Ingresa tu correo electrónico y revisa tu correo para restablecer tu contraseña'
+        
+              LogoImage(
+                height: 220,
               ),
-            ),
-
-            _Body(),
-
-
-
-          ],
+        
+              Padding(
+                padding: const EdgeInsets.only( top: 20, bottom: 40),
+                child: TitleSubTitle(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  title: '¿Olvidaste tu contraseña?', 
+                  subTitle: 'Ingresa tu correo electrónico y revisa tu correo para restablecer tu contraseña'
+                ),
+              ),
+        
+              _Body(),
+        
+        
+        
+            ],
+          ),
         ),
       )
     );
@@ -67,7 +70,7 @@ class _Body extends StatelessWidget {
       width: double.infinity,
       height: size.height*0.7,
       // color: Colors.red[100],
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -79,6 +82,8 @@ class _Body extends StatelessWidget {
               
             // },
           ),
+
+          const SizedBox(height: 20,),
 
           ButtonBlue(
             onPressed: () async {
@@ -95,31 +100,6 @@ class _Body extends StatelessWidget {
             }, 
             nombre: 'Verificar'
           ),
-
-          SizedBox(height: 40,),
-
-          // InputForm(
-          //   hintText: '****',
-          //   labelText: 'Ingresa el código de verificación'
-          // ),
-
-          // Row(
-          //   children: [
-          //     Text('¿No recibiste el código?   '),
-          //     // SizedBox(width: 10,),
-          //     GestureDetector(
-          //       child: Text('Reenviar el código', style: TextStyle(fontWeight: FontWeight.w600),)),
-          //   ],
-          // ),
-
-          SizedBox(height: 40,),
-
-          // ButtonBlue(
-          //   onPressed: () {
-              
-          //   }, 
-          //   nombre: 'Confirmar'
-          // )
         ],
       ),
     );

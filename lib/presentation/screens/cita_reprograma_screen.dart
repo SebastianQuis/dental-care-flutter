@@ -12,6 +12,7 @@ import 'package:dental_care_app/presentation/widgets/widgets.dart';
  
 class CitaReprogramaScreen extends StatelessWidget {
   static const nombre = 'reprogramaScreen';
+  const CitaReprogramaScreen({super.key});
   
   @override
   Widget build(BuildContext context) {

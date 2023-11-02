@@ -19,6 +19,8 @@ class CitaService extends ChangeNotifier {
 
   Future<String?> crearCita(Cita cita) async {
     try {
+
+      
       isLoading = true;
       final url = Uri.https(_baseURL, 'citas.json');
       final rspta = await http.post(url, body: cita.toRawJson());
