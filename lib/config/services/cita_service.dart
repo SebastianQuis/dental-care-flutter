@@ -81,7 +81,7 @@ class CitaService extends ChangeNotifier {
       isLoading = true;
       final url = Uri.https(_baseURL,'citas/${cita.id}.json');
       final respuesta = await http.put(url, body: cita.toRawJson());
-      final dataDecodificada = jsonDecode(respuesta.body);
+      // final dataDecodificada = jsonDecode(respuesta.body);
       isLoading = false;
       return 'ok';
     } catch (e) {

@@ -62,21 +62,21 @@ class Body extends StatelessWidget {
 
           InputForm(
             labelText: 'Nombres', 
-            hintText: 'Ruth Esther',
+            hintText: usuarioLogueado!.nombre,
             enabled: false,
           ),
           
           InputForm(
             textInputType: TextInputType.name, 
             labelText: 'Apellidos', 
-            hintText: 'Rodriguez Martinez',
+            hintText: usuarioLogueado.apellidos,
             enabled: false,
           ),
           
           InputForm(
             textInputType: TextInputType.number, 
             labelText: 'Teléfono', 
-            hintText: usuarioLogueado!.celular,
+            hintText: usuarioLogueado.celular,
             onChanged: (value) => usuarioLogueado.celular = value,
           ),
           
@@ -88,9 +88,6 @@ class Body extends StatelessWidget {
           ),
 
           const SizedBox(height: 10,),
-
-          Text('${usuarioService.isLoading}'),
-
 
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
