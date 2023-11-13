@@ -19,8 +19,6 @@ class AuthService extends ChangeNotifier{
   
   UsuarioResponse? usuario;
   
-  bool isLoading = true;
-
   Future<String?> createUser( String email, String password) async {
 
     final Map<String, dynamic> authData = {
@@ -64,7 +62,7 @@ class AuthService extends ChangeNotifier{
         await storage.write(key: 'idToken', value: respuestaDecodificada['idToken']);
         Preferences.correo = respuestaDecodificada['email'];
       }
-      usuario = UsuarioResponse.fromJson(respuestaDecodificada); //TODO mantener usuario en  sharedpreferences
+      usuario = UsuarioResponse.fromJson(respuestaDecodificada);
       return null;
     } else {
       return respuestaDecodificada['error']['message'];

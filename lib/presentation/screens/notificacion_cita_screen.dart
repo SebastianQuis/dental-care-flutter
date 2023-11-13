@@ -1,3 +1,4 @@
+import 'package:dental_care_app/config/services/cita_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -49,8 +50,10 @@ class BodyNotificacion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final citaForm = Provider.of<CitaFormProvider>(context);
-    DateTime? fecha = parseStringDateTime(citaForm.fecha);
+    // final citaForm = Provider.of<CitaFormProvider>(context);
+    // DateTime? fecha = parseStringDateTime(citaForm.fecha);
+    final citaSeleccionada = Provider.of<CitaService>(context).citaSeleccionada;
+    
 
     return Container(
       width: double.infinity,
@@ -62,7 +65,7 @@ class BodyNotificacion extends StatelessWidget {
           TitleSubTitle(
             horizontal: 0,
             title: 'Cita reservada',
-            subTitle: 'Paciente: ${citaForm.paciente}',
+            subTitle: 'Paciente: ${citaSeleccionada!.paciente}',
           ),
 
           Container(
@@ -78,10 +81,10 @@ class BodyNotificacion extends StatelessWidget {
             ),
           ),
 
-          Text('${formatDateCalendar(fecha!)} ${fecha.day} de ${fomatMonthCalendar(fecha.month.toString())} ${fecha.year}', style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 18 ),),
-          Text('Hora: ${citaForm.horario1 ? '3:00 pm - 4:00 pm' 
-            : (citaForm.horario2 ? '5:00 pm - 6:00 pm' 
-            : (citaForm.horario3 ? '7:00 pm - 8:00 pm' 
+          Text(formatearFecha(citaSeleccionada.fecha!), style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18 ),),
+          Text('Hora: ${citaSeleccionada.horario1! ? '3:00 pm - 4:00 pm' 
+            : (citaSeleccionada.horario2! ? '5:00 pm - 6:00 pm' 
+            : (citaSeleccionada.horario3! ? '7:00 pm - 8:00 pm' 
             : 'Ninguno'))}'),
 
           const SizedBox(height: 20,),

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:dental_care_app/presentation/screens/screens.dart';
 
+import '../../presentation/screens/historial_screen.dart';
+
 class AppRoutes {
 
   static String initialRoute = CargaScreen.nombre;

@@ -30,7 +30,10 @@ class NewCitaScreen extends StatelessWidget {
     
               const PacienteDoctor(),
     
-              const CalendarHorario(),
+              ChangeNotifierProvider(
+                create: (context) => CitaFormProvider(),
+                child: CalendarHorario()
+              ),
     
             ],
           ),
@@ -82,6 +85,7 @@ class _CalendarHorarioState extends State<CalendarHorario> {
                 if (date == null) return;
                 citaService.selectedDate = date;
                 citaForm.fecha = parseDateTimeString(citaService.selectedDate!);
+                citaService.citaSeleccionada?.fecha = parseDateTimeString(citaService.selectedDate!);
                 setState(() {});
               }, 
               nombre: citaService.selectedDate != null 
@@ -141,6 +145,7 @@ class _CalendarHorarioState extends State<CalendarHorario> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+
             
                   SizedBox(
                     width: size.width *0.4,
@@ -148,7 +153,10 @@ class _CalendarHorarioState extends State<CalendarHorario> {
                       onPressed: (citaService.selectedDate != null && !citaService.isLoading)
                         ? () async {
                             citaForm.isLoading = true;
-                            citaForm.paciente = citaSeleccionada!.paciente;
+                            // citaForm.paciente = citaSeleccionada!.paciente;
+                            citaSeleccionada!.horario1 = citaForm.horario1;
+                            citaSeleccionada.horario2 = citaForm.horario2;
+                            citaSeleccionada.horario3 = citaForm.horario3;
                             if (!citaForm.isValidForm()) return;
                             Navigator.pushNamed(context, MetodoPagoScreen.nombre);
                           }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:dental_care_app/presentation/providers/cita_form_provider.dart';
 import 'package:dental_care_app/presentation/helpers/preferences.dart';
 import 'package:dental_care_app/config/services/services.dart';
 import 'package:dental_care_app/config/routes/app_routes.dart';
@@ -24,7 +23,6 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AuthService()),
         ChangeNotifierProvider(create: (context) => UsuarioService()),
         ChangeNotifierProvider(create: (context) => CitaService()),
-        ChangeNotifierProvider(create: (context) => CitaFormProvider()),
       ],
       child: const MyApp(),
     );

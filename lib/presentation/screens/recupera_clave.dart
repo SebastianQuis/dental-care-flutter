@@ -97,7 +97,7 @@ class _Body extends StatelessWidget {
               } else {
                 NotificacionService.showSnackBar('Correo incorrecto', Colors.red);
               }
-            }, 
+            },
             nombre: 'Verificar'
           ),
         ],

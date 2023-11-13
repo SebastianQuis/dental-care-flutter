@@ -104,3 +104,19 @@ List<Cita> convertirMapaACitas(Map<String, dynamic> mapa) {
 
   return citas;
 }
+
+String formatearFecha(String fecha) {
+  List<String> partesFecha = fecha.split('/');
+  
+  String dia = partesFecha[0];
+  String mes = partesFecha[1];
+  String anio = partesFecha[2];
+  
+  Map<String, String> meses = {
+    '01': 'enero', '02': 'febrero', '03': 'marzo', '04': 'abril',
+    '05': 'mayo', '06': 'junio', '07': 'julio', '08': 'agosto',
+    '09': 'septiembre', '10': 'octubre', '11': 'noviembre', '12': 'diciembre'
+  };
+
+  return '$dia de ${meses[mes]} del $anio';
+}

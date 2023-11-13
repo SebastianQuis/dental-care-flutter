@@ -34,7 +34,7 @@ class MetodoPagoScreen extends StatelessWidget {
 
               const SizedBox(height: 40,),
           
-              const TipoPago(),
+              TipoPago(),
           
           
             ],
@@ -58,8 +58,9 @@ class _TipoPagoState extends State<TipoPago> {
   
   @override
   Widget build(BuildContext context) {
-    final citaForm = Provider.of<CitaFormProvider>(context);
+    // final citaForm = Provider.of<CitaFormProvider>(context);
     final citaService = Provider.of<CitaService>(context);
+    final citaSeleccionada = citaService.citaSeleccionada;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -105,32 +106,42 @@ class _TipoPagoState extends State<TipoPago> {
 
           const SizedBox(height: 40,),
 
+          // ButtonBlue(
+          //   onPressed: () {
+          //     print(citaSeleccionada!.fecha);
+          //     print(citaSeleccionada.paciente);
+          //     print(citaSeleccionada.horario1);
+          //     print(citaSeleccionada.horario2);
+          //     print(citaSeleccionada.horario3);
+          //   }, 
+          //   nombre: 'Probar'
+          // ),
+
           ButtonBlue(
             onPressed: () async {
-              
               if (selectedCheckBox == -1) {
                 NotificacionService.showSnackBar('Debe seleccionar un método de pago', Colors.red);
               } else {
                 final newCita = Cita(
-                  fecha   : citaForm.fecha, 
-                  paciente: citaForm.paciente,
-                  horario1: citaForm.horario1,
-                  horario2: citaForm.horario2,
-                  horario3: citaForm.horario3,
+                  fecha   : citaSeleccionada!.fecha, 
+                  paciente: citaSeleccionada.paciente,
+                  horario1: citaSeleccionada.horario1,
+                  horario2: citaSeleccionada.horario2,
+                  horario3: citaSeleccionada.horario3,
                   diagnostico: '',
                   recomendaciones: '',
                 );
                 
                 await Future.delayed(const Duration(seconds: 1));
                 String? token = await citaService.crearCita(newCita);
-                citaForm.isLoading = false;
+                // citaForm.isLoading = false;
 
                 if (token == null) {
                   NotificacionService.showSnackBar('Error al registrar', Colors.red);
-                  citaForm.isLoading = false;
+                  // citaForm.isLoading = false;
                 } else {
                   // ignore: use_build_context_synchronously
-                  mostrarAlerta( context, 'Mensaje', '${citaForm.paciente}, tu reserva se realizó con éxito', 
+                  mostrarAlerta( context, 'Mensaje', '${citaSeleccionada.paciente}, tu reserva se realizó con éxito', 
                     [
                       MaterialButton(
                         onPressed: () {
