@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 import 'package:dental_care_app/domain/entities/entities.dart';
 import 'package:dental_care_app/config/services/services.dart';
-import 'package:dental_care_app/presentation/providers/providers.dart';
 import 'package:dental_care_app/presentation/screens/screens.dart';
 import 'package:dental_care_app/presentation/widgets/widgets.dart';
  
@@ -34,8 +33,7 @@ class MetodoPagoScreen extends StatelessWidget {
 
               const SizedBox(height: 40,),
           
-              TipoPago(),
-          
+              const TipoPago(),
           
             ],
           ),
@@ -178,8 +176,7 @@ class _TipoPagoState extends State<TipoPago> {
 class _ImageTitlePago extends StatelessWidget {
   final String image;
   final String title;
-  const _ImageTitlePago({
-    super.key, 
+  const _ImageTitlePago({ 
     required this.image, 
     required this.title,
   });

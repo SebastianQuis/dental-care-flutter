@@ -140,19 +140,57 @@ class MiCita extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final citaService = Provider.of<CitaService>(context);
-
-    Cita? cita = listCitas[listCitas.length - 1];
-    final fecha = parseStringDateTime(cita.fecha!);
-    citaService.citaReprogramar = cita;
-    final horario = (cita.horario1!) ? '3:00 pm a 4:00 pm' : (cita.horario2!) ? '5:00 pm a 6:00 pm' : (cita.horario3!) ? '7:00 pm a 8:00 pm' : 'Sin asignar';
+    listCitas.sort((a, b) => b.fecha!.compareTo(a.fecha!));
+    final newListCitas = listCitas.reversed.toList();
+    Cita? cita = newListCitas.isNotEmpty ? newListCitas.last : null;
     
-    return IconAndTitle(
-      iconData: Icons.calendar_month, 
-      title: 'Próxima cita', 
-      description: 'Tu cita pendiente es el ${formatDateCalendar(fecha!)} ${fecha.day} de ${fomatMonthCalendar(fecha.month.toString())} de $horario',
-    );
+    if (cita != null) {
+      final fecha = parseStringDateTime(cita.fecha!);
+      citaService.citaReprogramar = cita;
+      final horario = (cita.horario1!)
+          ? '3:00 pm a 4:00 pm'
+          : (cita.horario2!)
+              ? '5:00 pm a 6:00 pm'
+              : (cita.horario3!)
+                  ? '7:00 pm a 8:00 pm'
+                  : 'Sin asignar';
+
+      return IconAndTitle(
+        iconData: Icons.calendar_month,
+        title: 'Próxima cita',
+        description:
+            'Tu cita pendiente es el ${formatDateCalendar(fecha!)} ${fecha.day} de ${fomatMonthCalendar(fecha.month.toString())} de $horario',
+      );
+    } else {
+      return const IconAndTitle(
+        iconData: Icons.calendar_month,
+        title: 'Proxima cita',
+        description: 'Sin citas.',
+      );
+    }
   }
 }
+
+// class MiCita extends StatelessWidget {
+//   final List<Cita> listCitas;
+//   const MiCita({super.key, required this.listCitas});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final citaService = Provider.of<CitaService>(context);
+
+//     Cita? cita = listCitas[listCitas.length - 1];
+//     final fecha = parseStringDateTime(cita.fecha!);
+//     citaService.citaReprogramar = cita;
+//     final horario = (cita.horario1!) ? '3:00 pm a 4:00 pm' : (cita.horario2!) ? '5:00 pm a 6:00 pm' : (cita.horario3!) ? '7:00 pm a 8:00 pm' : 'Sin asignar';
+    
+//     return IconAndTitle(
+//       iconData: Icons.calendar_month, 
+//       title: 'Próxima cita', 
+//       description: 'Tu cita pendiente es el ${formatDateCalendar(fecha!)} ${fecha.day} de ${fomatMonthCalendar(fecha.month.toString())} de $horario',
+//     );
+//   }
+// }
 
 class _RepogramarCita extends StatelessWidget {
 
@@ -161,12 +199,13 @@ class _RepogramarCita extends StatelessWidget {
     
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, CitaReprogramaScreen.nombre);
+
+        Navigator.pushNamed(context, CitaHistorialReprogramaScreen.nombre);
       },
       child: const IconAndTitle(
         iconData: Icons.calendar_month_rounded, 
         title: 'Reprogramar cita', 
-        description: 'Modifique la fecha su última cita registrada',
+        description: 'Modifique la fecha de una cita registrada',
       )
     );
   }

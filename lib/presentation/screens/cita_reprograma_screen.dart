@@ -35,7 +35,7 @@ class CitaReprogramaScreen extends StatelessWidget {
           
               TitleSubTitle(
                 horizontal: 20,
-                title: 'Repogramación de cita',
+                title: 'Reprogramación de cita',
                 subTitle: 'Modifica la fecha y hora de tu última cita registrada',
               ),
           
@@ -63,6 +63,7 @@ class _BodyReprogramacionState extends State<_BodyReprogramacion> {
   
   @override
   Widget build(BuildContext context) {
+    DateTime? fechaInicial = parseStringDateTime(widget.cita.fecha!);
     final citaService = Provider.of<CitaService>(context);
     
     Future<DateTime?> pickDate() => showDatePicker(context: context,
@@ -90,10 +91,11 @@ class _BodyReprogramacionState extends State<_BodyReprogramacion> {
               citaService.selectedDate = date;
               widget.cita.fecha = parseDateTimeString(citaService.selectedDate!);
               setState(() {});
-            }, 
-            nombre: citaService.selectedDate != null 
-              ? '${formatDateCalendar(citaService.selectedDate!)} ${citaService.selectedDate!.day} del ${citaService.selectedDate!.month} de ${citaService.selectedDate!.year}'
-              : 'Seleccionar fecha'
+            },
+            nombre: '${formatDateCalendar(fechaInicial!)} ${fechaInicial.day} del ${fechaInicial.month} de ${fechaInicial.year}'
+            // nombre: citaService.selectedDate != null 
+            //   ? '${formatDateCalendar(citaService.selectedDate!)} ${citaService.selectedDate!.day} del ${citaService.selectedDate!.month} de ${citaService.selectedDate!.year}'
+            //   : '${formatDateCalendar(fechaInicial!)} ${fechaInicial.day} del ${fechaInicial.month} de ${fechaInicial.year}'
           ),
 
           TitleSubTitle(title: 'Horario', horizontal: 0, vertical: 20),
@@ -170,6 +172,7 @@ class _BodyReprogramacionState extends State<_BodyReprogramacion> {
 
                   String rspt = await citaService.actualizarCita(newCita);
                   if (rspt == 'ok') {
+                    // ignore: use_build_context_synchronously
                     mostrarAlerta( context, 'Mensaje', '${widget.cita.paciente}, tu reserva se actualizó con éxito', 
                       [
                         MaterialButton(
@@ -185,7 +188,7 @@ class _BodyReprogramacionState extends State<_BodyReprogramacion> {
                   }
                 }
                 : null, 
-              nombre: 'Repogramar cita'
+              nombre: 'Reprogramar cita'
             )
     
         ],
